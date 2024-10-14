@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:@localhost:3306/vip_nuxt"
+}
+
+model customer {
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String?
+  contacts Json?
+  order    order[]
+}
+
+model product {
+  id           Int            @id @default(autoincrement())
+  name         String
+  price        Float
+  orderproduct orderproduct[]
+}
+
+model numberlist {
+  id             Int           @id @default(autoincrement())
+  number         String
+  disabled       Boolean?      @default(false)
+  orderproductId Int
+  orderproduct   orderproduct? @relation(fields: [orderproductId], references: [id], map: "NumberList_orderProductId_fkey")
+}
+
+model order {
+  id           Int            @id @default(autoincrement())
+  customerId   Int
+  createdAt    DateTime       @default(now())
+  customer     customer?      @relation(fields: [customerId], references: [id], map: "Order_customerId_fkey")
+  orderproduct orderproduct[]
+
+  @@index([customerId], map: "Order_customerId_fkey")
+}
+
+model orderproduct {
+  id         Int          @id @default(autoincrement())
+  quant      Int
+  orderId    Int
+  productId  Int
+  numberlist numberlist[]
+  product    product?     @relation(fields: [productId], references: [id], map: "OrderProduct_productId_fkey")
+  order      order?       @relation(fields: [orderId], references: [id], map: "OrderProduct_orderId_fkey")
+
+  @@index([productId], map: "OrderProduct_productId_fkey")
+  @@index([orderId], map: "OrderProduct_orderId_fkey")
+}
+
+model user {
+  id       Int    @id @default(autoincrement())
+  email    String @unique(map: "User_email_key")
+  name     String
+  password String
+  token    String
+  role     String
+}
