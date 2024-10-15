@@ -131,10 +131,9 @@ async function migrateData() {
 
             // Insere o customer
             const [[participant]] = await laravelDb.execute('SELECT * FROM customer_list WHERE id = ?', [orderList.customer_id]);
-            const contacts = JSON.stringify({ telephone: participant.phone });
             const [customerResult] = await nuxtDb.execute(
-                'INSERT INTO customer (name, email, contacts) VALUES (?, ?, ?)',
-                [`${participant.firstname} ${participant.lastname}`, participant.email, contacts]
+                'INSERT INTO customer (name, email, phone) VALUES (?, ?, ?)',
+                [`${participant.firstname} ${participant.lastname}`, participant.email, participant.phone]
             );
             const customerId = customerResult.insertId;
 

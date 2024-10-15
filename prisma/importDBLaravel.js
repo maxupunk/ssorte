@@ -155,12 +155,11 @@ async function migrateData() {
                 continue;
             }
 
-            const phoneNumber = extractNumbers(participant.telephone)
             // Insere o customer
-            const contacts = JSON.stringify({ telephone: phoneNumber });
+            const phoneNumber = extractNumbers(participant.telephone)
             const [customerResult] = await nuxtDb.execute(
-                'INSERT INTO customer (name, email, contacts) VALUES (?, ?, ?)',
-                [participant.name, participant.email, contacts]
+                'INSERT INTO customer (name, email, phone) VALUES (?, ?, ?)',
+                [participant.name, participant.email, phoneNumber]
             );
             const customerId = customerResult.insertId;
 
