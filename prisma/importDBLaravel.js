@@ -139,8 +139,8 @@ async function migrateData() {
         for (const product of products) {
             console.log('product', product);
             await nuxtDb.execute(
-                'INSERT INTO product (id, name, price) VALUES (?, ?, ?)',
-                [product.id, product.name, parseFloat(product.price)]
+                'INSERT INTO product (id, name, price, saleMin) VALUES (?, ?, ?, ?)',
+                [product.id, product.name, parseFloat(product.price), 10]
             );
         }
 

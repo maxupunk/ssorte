@@ -1,3 +1,5 @@
 <template>
-  <NuxtPage />
+  <v-main>
+    <NuxtPage />
+  </v-main>
 </template>

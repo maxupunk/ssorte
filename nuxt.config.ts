@@ -7,7 +7,9 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4
   },
-
+  runtimeConfig: {
+    secretJwt: process.env.APP_SECRET_JWT,
+  },
   build: {
     transpile: ['vuetify'],
   },
@@ -19,6 +21,7 @@ export default defineNuxtConfig({
       })
     },
     //...
+    '@pinia/nuxt'
   ],
   vite: {
     vue: {

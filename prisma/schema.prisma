@@ -4,13 +4,14 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:@localhost:3306/vip_nuxt"
+  url      = env("DATABASE_URL")
 }
 
 model customer {
   id       Int     @id @default(autoincrement())
   name     String
   email    String?
+  phone    String
   contacts Json?
   order    order[]
 }
@@ -19,21 +20,28 @@ model product {
   id           Int            @id @default(autoincrement())
   name         String
   price        Float
+  description  String?
+  image        String?
+  saleMin      Int?           @default(1)
+  numberMin    Int?           @default(1)
+  numberMax    Int?           @default(1)
+  numLottery   String?        @default("000000")
+  formula      Json?
+  winnerNumber String?
+  active       Boolean?       @default(true)
   orderproduct orderproduct[]
-}
-
-model numberlist {
-  id             Int           @id @default(autoincrement())
-  number         String
-  disabled       Boolean?      @default(false)
-  orderproductId Int
-  orderproduct   orderproduct? @relation(fields: [orderproductId], references: [id], map: "NumberList_orderProductId_fkey")
+  numberSort   numberSort[]
 }
 
 model order {
   id           Int            @id @default(autoincrement())
   customerId   Int
+  userId       Int?
+  user         user?          @relation(fields: [userId], references: [id], map: "Order_userId_fkey")
+  financeId    Int?
+  finance      finance?       @relation(fields: [financeId], references: [id], map: "Order_financeId_fkey")
   createdAt    DateTime       @default(now())
+  updatedAt    DateTime?      @updatedAt
   customer     customer?      @relation(fields: [customerId], references: [id], map: "Order_customerId_fkey")
   orderproduct orderproduct[]
 
@@ -53,11 +61,54 @@ model orderproduct {
   @@index([orderId], map: "OrderProduct_orderId_fkey")
 }
 
+model numberlist {
+  id             Int           @id @default(autoincrement())
+  number         String
+  disabled       Boolean?      @default(false)
+  orderproductId Int
+  orderproduct   orderproduct? @relation(fields: [orderproductId], references: [id], map: "NumberList_orderProductId_fkey")
+}
+
 model user {
-  id       Int    @id @default(autoincrement())
-  email    String @unique(map: "User_email_key")
-  name     String
-  password String
-  token    String
-  role     String
+  id                Int          @id @default(autoincrement())
+  email             String       @unique(map: "User_email_key")
+  name              String
+  password          String
+  phone             String?
+  pix               String?
+  commissionPercent Float?       @default(0)
+  rule              String? // admin, vendedor
+  active            Boolean?     @default(true)
+  order             order[]
+  commission        commission[]
+}
+
+// a comissaion pegara todos ordens da data atual até a data da ultima comissão paga
+// os dados são guiador apartir da ultima comissão paga
+model commission {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        user     @relation(fields: [userId], references: [id], map: "Commission_userId_fkey")
+  description String
+  value       Float
+  status      Int      @default(0) // 0: pending, 1: paid, 2: cancel
+  createdAt   DateTime @default(now())
+}
+
+model finance {
+  id          Int       @id @default(autoincrement())
+  description String?
+  price       Float
+  status      Int       @default(0) // 0: pending, 1: paid, 2: cancel
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  order       order[]
+}
+
+model numberSort {
+  id        Int      @id @default(autoincrement())
+  productId Int?
+  product   product? @relation(fields: [productId], references: [id], map: "NumberSort_productId_fkey")
+  number    String
+  createdAt DateTime @default(now())
 }

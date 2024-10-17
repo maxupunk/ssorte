@@ -59,7 +59,7 @@ async function runConfetti() {
                 },
                 colors: colors
             });
-            await sleep(randomInRange(200, 1000))
+            await sleep(randomInRange(400, 1000))
         }
     }
 };
@@ -71,16 +71,6 @@ function randomInRange(min: any, max: any) {
 async function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-function handleKeyPress(event: KeyboardEvent) {
-  if (event.key === 'C' || event.key === 'c') {
-    props.winner.show = !props.winner.show;
-  }
-}
-
-onMounted(() => {
-  window.addEventListener('keydown', handleKeyPress);
-});
 </script>
 
 <style scoped>
