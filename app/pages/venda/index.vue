@@ -1,5 +1,6 @@
 <template>
     <appBar title="Lista de vendas">
+        <v-text-field v-model="search" label="Pesquisar" append-icon="mdi-magnify" @click:append="fetchVendas"></v-text-field>
         <v-btn to="/venda/add" icon="mdi-plus" variant="text"></v-btn>
     </appBar>
     <v-container>

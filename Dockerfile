@@ -21,7 +21,7 @@ RUN npx prisma generate && yarn build
 FROM node:22.10.0-alpine
 
 # Instalar PM2 globalmente
-RUN yarn global add pm2
+# RUN yarn global add pm2
 
 # Definir o diretório de trabalho
 WORKDIR /app
@@ -33,4 +33,4 @@ COPY --from=build /app/.output ./
 EXPOSE 3000
 
 # Iniciar a aplicação usando PM2
-CMD ["pm2-runtime", "server/index.mjs"]
+CMD ["node", "server/index.mjs"]
