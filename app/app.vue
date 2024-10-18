@@ -1,5 +1,5 @@
 <template>
-  <v-app>{{ token }}
+  <v-app>
     <NuxtLayout v-if="token">
       <NuxtPage />
     </NuxtLayout>
