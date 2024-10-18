@@ -1,8 +1,9 @@
 <template>
-  <v-app>
-    <NuxtLayout>
+  <v-app>{{ token }}
+    <NuxtLayout v-if="token">
       <NuxtPage />
     </NuxtLayout>
+    <login v-else />
     <snackbar />
   </v-app>
 </template>
@@ -10,16 +11,10 @@
 import snackbar from '~/components/snackbar.vue';
 import { defineComponent } from 'vue';
 import { useAuthStore } from '~/stores/auth';
-import { useRouter } from 'vue-router'
-const router = useRouter()
+import login from '~/components/login.vue';
 
-const { user, token } = useAuthStore();
-
-watchEffect(() => {
-  if (!token) {
-    router.push('/login');
-  }
-});
+const useAuth = useAuthStore();
+const { token } = storeToRefs(useAuth)
 
 defineComponent({
   components: {

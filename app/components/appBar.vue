@@ -37,9 +37,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '~/stores/auth'
-import { useRouter } from 'vue-router'
 
-const router = useRouter()
 const useAuth = useAuthStore()
 const { token, user } = storeToRefs(useAuth)
 
@@ -54,7 +52,7 @@ const drawer = ref(false)
 
 function logout() {
   useAuth.logout().then(() => {
-    router.push('/login')
+    snackbarShow('Logout efetuado com sucesso', 'success')
   })
 }
 

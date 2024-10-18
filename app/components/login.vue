@@ -18,8 +18,6 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuthStore } from '~/stores/auth';
 import { snackbarShow } from "~/composables/useUi"
 
@@ -28,13 +26,16 @@ const useAuth = useAuthStore()
 const email = ref('admin')
 const password = ref('admin')
 const loading = ref(false)
-const router = useRouter()
+
+defineComponent({
+    name: 'login',
+})
 
 async function login() {
-    useAuth.login(email.value, password.value).then(response => {
+    await useAuth.login(email.value, password.value).then(response => {
         console.log("login", response)
         snackbarShow('Login efetuado com sucesso', 'success')
-        router.push('/')
+        // router.push('/')
     }).catch(error => {
         snackbarShow(error.data.message, 'error')
     })

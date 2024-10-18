@@ -1,6 +1,8 @@
 import { H3Event, createError } from 'h3';
 import jwt from 'jsonwebtoken'
-const SECRETJWT = process.env.APP_SECRET_JWT as string
+const config = useRuntimeConfig();
+
+const SECRETJWT = config.secretJwt as string
 
 const regexWhitelist = [/^\/api\/login$/, /^\/api\/logout$/, /^\/api\/numero$/]; // Example regex patterns for whitelist
 
