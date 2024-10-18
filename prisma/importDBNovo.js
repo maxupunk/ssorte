@@ -66,6 +66,9 @@ async function migrateData() {
       // Insere números em numberlist
       for (const number of numbers) {
         console.log('numberList', number);
+        if (number === '') {
+          continue
+        }
         await nuxtDb.execute(
           'INSERT INTO numberlist (number, orderproductId) VALUES (?, ?)',
           [number, orderProductId]
