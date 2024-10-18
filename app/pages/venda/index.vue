@@ -1,6 +1,8 @@
 <template>
-    <appBar title="Lista de vendas">
-        <v-text-field v-model="search" label="Pesquisar" append-icon="mdi-magnify" @click:append="fetchVendas"></v-text-field>
+    <appBar title="Vendas" :loading="loading">
+        <v-text-field label="Pesquisar" hide-details variant="outlined" clearable @update:modelValue="searchVendas"
+            :loading="loading" :disabled="loading"></v-text-field>
+        <v-spacer></v-spacer>
         <v-btn to="/venda/add" icon="mdi-plus" variant="text"></v-btn>
     </appBar>
     <v-container>
@@ -25,14 +27,27 @@ const headers = [
     { title: 'Quantidade', key: 'orderproduct[0].quant' },
 ]
 const selectedItem = ref({})
+let timeoutId: any = null
+const loading = ref(false)
 
-function fetchVendas() {
-    $fetch('/api/order').then((data: any) => {
-        if (data) {
-            vendasList.value = data
-        }
+function searchVendas(search: string) {
+    if (timeoutId) {
+        clearTimeout(timeoutId)
+    }
+    timeoutId = setTimeout(() => {
+        fetchVendas(search)
+    }, 500)
+}
+
+function fetchVendas(search = '' as string) {
+    loading.value = true
+    const query = search ? `?search=${search}` : ''
+    $fetch(`/api/order${query}`).then((data: any) => {
+        vendasList.value = data
     }).catch(() => {
         snackbarShow('Erro ao buscar vendas', 'error')
+    }).finally(() => {
+        loading.value = false
     })
 }
 
