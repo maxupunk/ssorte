@@ -23,8 +23,8 @@ import { snackbarShow } from "~/composables/useUi"
 
 const useAuth = useAuthStore()
 
-const email = ref('admin')
-const password = ref('admin')
+const email = ref()
+const password = ref()
 const loading = ref(false)
 
 defineComponent({
