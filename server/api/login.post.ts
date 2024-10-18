@@ -1,7 +1,9 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import prisma from "~~/server/prisma";
-const SECRETJWT = process.env.APP_SECRET_JWT as string
+const config = useRuntimeConfig();
+
+const SECRETJWT = config.secretJwt as string
 
 export default defineEventHandler(async (event) => {
   let body = await readBody(event);
