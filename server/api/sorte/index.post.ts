@@ -28,8 +28,6 @@ export default defineEventHandler(async (event) => {
 
     setResponseStatus(event, 201)
     return { message: "Cliente adicionado com sucesso!" };
-
-    // 560181
   } catch (e: any) {
     throw createError({
       status: 400,
