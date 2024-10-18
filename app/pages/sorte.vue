@@ -4,8 +4,8 @@
     <span class="text-pause">Pausado</span>
   </v-overlay>
 
-  <v-dialog v-model="showProductDialog" persistent max-width="600px">
-    <v-card>
+  <v-dialog v-model="showProductDialog" persistent max-width="900px">
+    <v-card v-if="Object.keys(products).length">
       <v-card-title class="headline">Selecione um sorteio</v-card-title>
       <v-card-text>
         <v-select v-model="productID" :items="products" item-title="name" item-value="id" label="Sorteio" />
@@ -16,6 +16,13 @@
           selecionar o sorteio
         </v-btn>
       </v-card-actions>
+    </v-card>
+    <v-card v-else>
+      <v-card-text class="text-center">
+        <h1>
+          Não há sorteios em aberto, por favor, aguarde a abertura de um novo sorteio.
+        </h1>
+      </v-card-text>
     </v-card>
   </v-dialog>
 
@@ -69,7 +76,7 @@
       {{ currentNumber }}
     </v-col>
     <v-col cols="12" class="text-center cor-preto pa-8">
-      <v-img src="https://vippremiacoees.com/products/1711125215.png" height="230px" />
+      <v-img src="/assets/logo.png" height="230px" />
     </v-col>
   </v-row>
 
@@ -167,15 +174,20 @@ async function startSort() {
     }
     const isParticipant: any = await fetchSorte(currentNumber.value)
     if (isParticipant) {
-      await sendSorte(generatedNumbers)
-      const nameWinner = isParticipant.orderproduct?.order?.customer?.name
-      const dateWinner = isParticipant.orderproduct?.order?.createdAt
-      winner.value = {
-        number: isParticipant.number.toString(),
-        name: nameWinner,
-        date: dateWinner,
-        show: true,
-      }
+      await sendSorte(generatedNumbers).then(() => {
+        const nameWinner = isParticipant.orderproduct?.order?.customer?.name
+        const dateWinner = isParticipant.orderproduct?.order?.createdAt
+        winner.value = {
+          number: isParticipant.number.toString(),
+          name: nameWinner,
+          date: dateWinner,
+          show: true,
+        }
+        snackbarShow('Ganhador encontrado', 'success')
+      }).catch((error) => {
+        console.log(error)
+        snackbarShow('Erro ao enviar o relatorio dos numeros do sorteio, refaça o sorteio', 'error')
+      })
       break
     }
     // Apply the algorithm
@@ -200,6 +212,13 @@ function sleep(ms: number) {
 async function selectProduct() {
   fetchProduct(productID.value);
   showProductDialog.value = false;
+}
+
+function enterFullscreen() {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  }
 }
 
 async function sendSorte(numList: any) {
@@ -260,12 +279,17 @@ async function fetchSorte(number: string) {
 }
 
 onMounted(() => {
+  enterFullscreen();
   fetchProducts();
 });
 
 </script>
 
 <style scoped>
+body {
+  overflow: hidden;
+}
+
 .text-pause {
   font-size: 100px;
   font-weight: bold;
