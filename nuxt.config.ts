@@ -17,6 +17,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     secretJwt: process.env.APP_SECRET_JWT,
+    bdUrl: process.env.DATABASE_URL
   },
   build: {
     transpile: ['vuetify'],

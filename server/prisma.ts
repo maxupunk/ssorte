@@ -1,10 +1,11 @@
 import { PrismaClient } from '@prisma/client'
+import dotenv from 'dotenv';
+dotenv.config();
 
-const config = useRuntimeConfig();
 const prisma = new PrismaClient({
     datasources: {
         db: {
-            url: config.bdUrl
+            url: process.env.DATABASE_URL
         }
     }
 })

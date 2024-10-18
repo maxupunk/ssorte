@@ -1,0 +1,14 @@
+services:
+  app-ssort:
+    build:
+      context: .
+    ports:
+      - '${DOCKER_PORT_EXT}:3000'
+    networks:
+      - default-network
+
+#Docker Networks
+networks:
+  default-network:
+    name: app-ssort-network
+    driver: bridge
