@@ -13,19 +13,18 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     setToken(data: any) {
-      this.user = data.user
-      this.token = data.token
       setToken(data.token)
       setUser(data.user)
+      this.user = data.user
+      this.token = data.token
     },
     async login(email: string, password: string) {
-      const response = await $fetch('/api/login', {
+      return await $fetch('/api/login', {
         method: 'POST',
         body: { email: email, password: password },
+      }).then((res) => {
+        this.setToken(res)
       })
-      if (!response) return
-      this.setToken(response)
-      return response
     },
     async logout() {
       const response = await $fetch('/api/logout')
