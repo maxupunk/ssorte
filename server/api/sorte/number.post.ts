@@ -25,6 +25,14 @@ export default defineEventHandler(async (event: any) => {
     })
 
     if (sorte) {
+        await prisma.product.update({
+            where: {
+                id: body.productId
+            },
+            data: {
+                winnerNumber: body.number,
+            }
+        })
         return sorte
     } else {
         return
