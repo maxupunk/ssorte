@@ -26,6 +26,12 @@ RUN yarn global add pm2
 # Definir o diretório de trabalho
 WORKDIR /app
 
+# Copiar o código da aplicação
+COPY --from=build ./app/package*.json ./
+COPY --from=build ./app/node_modules ./node_modules
+COPY --from=build ./app/prisma ./prisma
+COPY --from=build ./app/.env ./
+
 # Copiar a aplicação construída da etapa de build
 COPY --from=build /app/.output ./
 
