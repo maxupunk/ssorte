@@ -1,7 +1,7 @@
 import prisma from "~~/server/prisma";
 
 export default defineEventHandler(async (event) => {
-  const user = event.context.user;
+  // const user = event.context.user;
   let searchConditions = {};
 
   const query = getQuery(event)
@@ -11,25 +11,38 @@ export default defineEventHandler(async (event) => {
         {
           customer: {
             phone: {
-              startsWith: query.search
-            }
-          }
+              startsWith: query.search,
+            },
+          },
         },
         {
           customer: {
             name: {
-              startsWith: query.search
-            }
-          }
-        }
-      ]
+              startsWith: query.search,
+            },
+          },
+        },
+        {
+          orderproduct: {
+            some: {
+              numberlist: {
+                some: {
+                  number: {
+                    startsWith: query.search,
+                  },
+                },
+              },
+            },
+          },
+        },
+      ],
     };
   }
 
   try {
     const customerResp = await prisma.order.findMany({
       orderBy: [
-        { id: 'asc' }
+        { id: 'desc' }
       ],
       take: 100,
       include: {
@@ -44,7 +57,7 @@ export default defineEventHandler(async (event) => {
         }
       },
       where: {
-        ...user.rule !== 'admin' ? { userId: user.id } : {},
+        // ...user.rule !== 'admin' ? { userId: user.id } : {},
         ...searchConditions
       }
     });
