@@ -20,7 +20,8 @@ export default defineEventHandler(async (event: any) => {
             }
         },
         where: {
-            number: body.number
+            number: body.number,
+            disabled: false
         }
     })
 
