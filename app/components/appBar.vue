@@ -18,6 +18,7 @@
 
     <v-divider></v-divider>
     <v-list nav>
+      <v-list-item link prepend-icon="mdi-home" title="Home" to="/" />
       <v-list-subheader>Gerencia</v-list-subheader>
       <v-list-item link prepend-icon="mdi-clipboard-text" title="Vendas" to="/venda" />
       <v-list-item v-if="user.rule == 'admin'" link prepend-icon="mdi-store" title="Produtos" to="/produto" />
