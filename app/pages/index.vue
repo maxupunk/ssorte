@@ -1,7 +1,5 @@
 <template>
-    <appBar title="Home">
-        <v-btn icon="mdi-magnify" variant="text"></v-btn>
-    </appBar>
+    <appBar title="Home" />
     <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
             <v-col cols="12" md="8">
