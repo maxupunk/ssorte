@@ -31,6 +31,7 @@ CREATE TABLE `product` (
 CREATE TABLE `order` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `customerId` INTEGER NOT NULL,
+    `status` INTEGER NULL DEFAULT 0,
     `userId` INTEGER NULL,
     `financeId` INTEGER NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),

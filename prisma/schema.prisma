@@ -36,6 +36,7 @@ model product {
 model order {
   id           Int            @id @default(autoincrement())
   customerId   Int
+  status       Int?           @default(0) // 0 = ok, 1 = cancel
   userId       Int?
   user         user?          @relation(fields: [userId], references: [id], map: "Order_userId_fkey")
   financeId    Int?
