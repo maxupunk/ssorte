@@ -37,7 +37,7 @@ async function migrateData() {
     for (const orderList of order_lists) {
 
       // Verifica se o produto é diferente do produto que queremos migrar
-      if (orderList.product_id !== 67 || orderList.status == 2) {
+      if (orderList.product_id !== 67 || orderList.status !== 2) {
         continue
       }
 
