@@ -1,24 +1,25 @@
 <template>
-    <appBar title="Venda" />
+    <appBar title="Venda" :loading="loading" />
     <v-container>
         <v-card>
             <v-form v-model="valid" :disabled="finished">
                 <v-card-text>
                     <v-row>
                         <v-col>
-                            <v-text-field label="Nome do participante" v-model="customer.name" :rule="ruleName" />
+                            <v-text-field label="Nome do participante" v-model="customer.name" :rules="ruleName" />
                         </v-col>
                     </v-row>
                     <v-row>
                         <v-col>
                             <v-text-field label="Numero do telefone" v-maska="'(##) 9 ####-####'"
-                                v-model="customer.phone" :rule="rulePhone" />
+                                v-model="customer.phone" :rules="rulePhone" />
                         </v-col>
                     </v-row>
                     <v-row>
                         <v-col cols="12">
                             <v-select label="Sorteio" v-model="orderProduct.productId" :items="productList"
-                                item-title="name" item-value="id" @update:modelValue="selectProduct" return-object :rule="ruleProduct" />
+                                item-title="name" item-value="id" @update:modelValue="selectProduct" return-object
+                                :rules="ruleProduct" />
                         </v-col>
                         <v-col cols="12">
                             <v-number-input label="Quantidade" v-model="orderProduct.quant"
@@ -31,7 +32,7 @@
                             <h1>{{ formatMoney(orderProduct.quant * orderProduct.price) }}</h1>
                         </v-col>
                         <v-col>
-                            <v-checkbox v-model="paid" :rule="rulePaid" label="Confirma que esta pago?"></v-checkbox>
+                            <v-checkbox v-model="paid" :rules="rulePaid" label="Confirma que esta pago?"></v-checkbox>
                         </v-col>
                     </v-row>
                 </v-card-text>
@@ -39,14 +40,18 @@
             <v-card-actions>
                 <v-row>
                     <v-col>
-                        <v-btn color="success" variant="tonal" @click="confirVenda()" :disabled="valid && !finished" block>Confirmar venda</v-btn>
+                        {{ finished }}
+                        <v-btn color="success" variant="tonal" @click="confirVenda()" :disabled="!valid || finished"
+                            :loading="loading" block>Confirmar venda</v-btn>
                     </v-col>
                     <v-col cols="12" md="4">
-                        <v-btn color="primary" :disabled="!finished" variant="tonal" @click="resume.dialog = true" block>Comprovante</v-btn>
+                        <v-btn color="primary" :disabled="!finished" variant="tonal" @click="resume.dialog = true" block
+                            :loading="loading">Comprovante</v-btn>
                     </v-col cols="12" md="4">
                     <v-col cols="12" md="4">
-                        <v-btn :color="!valid ? 'warning' : 'success'" variant="tonal" @click="setNewOrder"
-                            block>Nova Venda</v-btn>
+                        <v-btn :color="valid ? 'warning' : 'success'" variant="tonal" @click="setNewOrder" block
+                            :loading="loading">Nova
+                            Venda</v-btn>
                     </v-col>
                 </v-row>
             </v-card-actions>
@@ -70,6 +75,7 @@ const productList = ref([]) as any
 const resume = ref({}) as any
 const finished = ref(false)
 const newOrder = ref(false)
+const loading = ref(false)
 
 const ruleName = [(v: string) => {
     return !!v || 'Nome é obrigatório'
@@ -96,14 +102,7 @@ const selectProduct = (value: any) => {
 }
 
 const confirVenda = async () => {
-    if (!customer.value.name || !customer.value.phone || customer.value.phone.length < 16 || !orderProduct.value.productId || !orderProduct.value.quant) {
-        snackbarShow('Preencha todos os campos', 'warning')
-        return
-    }
-    if (!paid.value) {
-        snackbarShow('Só pode ser faturado para gerar os códigos se tiver pago', 'warning')
-        return
-    }
+    loading.value = true
     const formData = {
         customer: {
             name: customer.value.name,
@@ -125,6 +124,8 @@ const confirVenda = async () => {
         snackbarShow(response?.message, 'success')
     }).catch((error) => {
         snackbarShow('Erro ao salvar a venda:' + error, 'error')
+    }).finally(() => {
+        loading.value = false
     })
 }
 
