@@ -8,8 +8,7 @@ import { fileURLToPath } from 'url';
 // Caminho do arquivo CSV
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const inputFilePath = path.join(__dirname, 'bilhetes_filtrados.csv');
-
+const inputFilePath = path.join(__dirname, 'bilhetes_5_total.csv');
 dotenv.config();
 
 // MySQL connection configuration
@@ -43,7 +42,7 @@ async function processCSV() {
             if (numberlistRows.length > 0) {
                 const orderproductId = numberlistRows[0].orderproductId;
 
-                console.log('number:', numberlistRows[0].number);
+                console.log('number:', number, name, phone);
                 // Get the orderId from the orderproduct table
                 const [orderproductRows] = await connection.execute(
                     'SELECT orderId FROM orderproduct WHERE id = ?',

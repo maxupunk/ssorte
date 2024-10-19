@@ -1,39 +1,32 @@
+import { spawn } from 'child_process';
 import path from 'path';
-import { exec } from 'child_process';
+import { fileURLToPath } from 'url';
 
-// Função para executar um script
-function executeScript(scriptPath) {
-  return new Promise((resolve, reject) => {
-    const absolutePath = path.resolve(__dirname, scriptPath);
-    exec(`node ${absolutePath}`, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Erro ao executar o script ${absolutePath}:`, stderr);
-        reject(error);
-      } else {
-        console.log(`Saída do script ${absolutePath}:`, stdout);
-        resolve();
-      }
-    });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+function runScript(scriptPath) {
+  const absolutePath = path.resolve(__dirname, scriptPath);
+  const child = spawn('node', [absolutePath]);
+
+  child.stdout.on('data', (data) => {
+    console.log(`${data}`);
+  });
+
+  child.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  child.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
   });
 }
 
-// Função para executar uma lista de scripts em ordem
-async function runScriptsInOrder(scripts) {
-  for (const script of scripts) {
-    try {
-      await executeScript(script);
-    } catch (error) {
-      console.error(`Execução interrompida devido a erro no script ${script}`);
-      break;
-    }
-  }
+function main() {
+  runScript('importDBLaravel.js');
+  runScript('importDBNovo.js');
+  runScript('importCSV.5.js');
+  runScript('importCSV.10.js');
 }
 
-// Lista de scripts a serem executados
-const scripts = [
-  'importDBLaravel.js',
-  'importCSV.js',
-];
-
-// Executar os scripts em ordem
-runScriptsInOrder(scripts);
+main();
