@@ -6,8 +6,14 @@
         <v-btn to="/venda/add" icon="mdi-plus" variant="text"></v-btn>
     </appBar>
     <v-container>
-        <v-data-table :headers="headers" :items="vendasList" @click:row="openDialog"></v-data-table>
-        <venda-dialog v-model="selectedItem"></venda-dialog>
+        <v-data-table :headers="headers" :items="vendasList" @click:row="openDialog">
+            <template #item.status="{ item }">
+                <v-chip :color="item.status === 0 ? 'success' : 'error'">
+                    {{ item.status === 0 ? 'habilitada' : 'Desabilitada' }}
+                </v-chip>
+            </template>
+        </v-data-table>
+        <venda-dialog v-model="selectedItem" @update="fetchVendas()"></venda-dialog>
     </v-container>
 </template>
 
@@ -17,14 +23,24 @@ import { snackbarShow } from "~/composables/useUi"
 import { ref, onMounted } from 'vue'
 import vendaDialog from '~/components/venda/vendaDialog.vue';
 
-const vendasList = ref([])
+interface VendaItem {
+    customer: {
+        name: string;
+        phone: string;
+    };
+    user: {
+        name: string;
+    };
+    status: number;
+}
+
+const vendasList = ref<VendaItem[]>([])
 
 const headers = [
     { title: 'Nome', key: 'customer.name' },
     { title: 'Telefone', key: 'customer.phone' },
     { title: 'Vendedor', key: 'user.name' },
-    { title: 'Financeiro Status', key: 'finance.status' },
-    { title: 'Quantidade', key: 'orderproduct[0].quant' },
+    { title: 'Status', key: 'status' },
 ]
 const selectedItem = ref({})
 let timeoutId: any = null
