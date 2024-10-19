@@ -1,5 +1,5 @@
 <template>
-    <appBar title="Lista de produtos">
+    <appBar title="Produtos">
     </appBar>
     <v-container>
         <v-data-table :headers="headers" :items="ProductList" @click:row="openProduct"></v-data-table>

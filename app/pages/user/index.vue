@@ -1,5 +1,5 @@
 <template>
-    <appBar title="Lista de usuario">
+    <appBar title="Usuarios">
         <v-btn icon="mdi-plus" variant="text" @click="createUser"></v-btn>
     </appBar>
     <v-container>
