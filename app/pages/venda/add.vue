@@ -40,7 +40,6 @@
             <v-card-actions>
                 <v-row>
                     <v-col>
-                        {{ finished }}
                         <v-btn color="success" variant="tonal" @click="confirVenda()" :disabled="!valid || finished"
                             :loading="loading" block>Confirmar venda</v-btn>
                     </v-col>
