@@ -8,8 +8,9 @@ const regexWhitelist = [/^\/api\/login$/, /^\/api\/logout$/, /^\/api\/numero$/, 
 
 const rules: Array<{ pattern: RegExp; rules: string[] }> = [
     { pattern: /^\/api\/user$/, rules: ['admin'] },
-    { pattern: /^\/api\/product\/list$/, rules: ['admin', 'vendedor'] },
-    { pattern: /^\/api\/product\/\w+$/, rules: ['admin'] },
+    { pattern: /^\/api\/product\/\d+$/, rules: ['admin'] },
+    { pattern: /^\/api\/order\/\d+\/enable$/, rules: ['admin'] },
+    { pattern: /^\/api\/order\/\d+\/disable$/, rules: ['admin'] },
     { pattern: /^\/api\/order$/, rules: ['admin', 'vendedor'] },
     { pattern: /^\/api\/customer$/, rules: ['admin'] },
 ];
