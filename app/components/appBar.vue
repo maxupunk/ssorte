@@ -24,6 +24,9 @@
       <v-list-item v-if="user.rule == 'admin'" link prepend-icon="mdi-store" title="Produtos" to="/produto" />
       <v-list-item v-if="user.rule == 'admin'" link prepend-icon="mdi-account" title="Usuario" to="/user" />
 
+      <v-list-subheader v-if="user.rule == 'admin'">Relatorio</v-list-subheader>
+      <v-list-item link prepend-icon="mdi-point-of-sale" title="Caixa" to="/report/caixa" v-if="user.rule == 'admin'" />
+
       <v-list-subheader v-if="user.rule == 'admin'">Ferramentar</v-list-subheader>
       <v-list-item link prepend-icon="mdi-clover" title="Sorteio" to="/sorte" v-if="user.rule == 'admin'" />
       <v-list-item link prepend-icon="mdi-cog-outline" title="Configurações" to="/config" v-if="user.rule == 'admin'" />
