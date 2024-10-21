@@ -1,6 +1,6 @@
 <template>
     <appBar title="Vendas" :loading="loading">
-        <v-text-field label="Pesquisar" hide-details variant="outlined" clearable @update:modelValue="searchVendas"
+        <v-text-field label="Pesquisar" v-model="search" hide-details variant="outlined" clearable @update:modelValue="searchVendas"
             :loading="loading" :disabled="loading"></v-text-field>
         <v-spacer></v-spacer>
         <v-btn to="/venda/add" icon="mdi-plus" variant="text"></v-btn>
@@ -13,7 +13,7 @@
                 </v-chip>
             </template>
         </v-data-table>
-        <venda-dialog v-model="selectedItem" @update="fetchVendas()"></venda-dialog>
+        <venda-dialog v-model="selectedItem" @update="fetchVendas(search)"></venda-dialog>
     </v-container>
 </template>
 
@@ -35,6 +35,7 @@ interface VendaItem {
 }
 
 const vendasList = ref<VendaItem[]>([])
+const search = ref()
 
 const headers = [
     { title: 'Nome', key: 'customer.name' },
