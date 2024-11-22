@@ -26,7 +26,7 @@ RUN yarn global add pm2
 # Definir o diretório de trabalho
 WORKDIR /app
 
-# Copiar o código da aplicação
+# Copiar o código da aplicação (para rodar os comandos do PRISMA dentro do container)
 COPY --from=build ./app/package*.json ./
 COPY --from=build ./app/node_modules ./node_modules
 COPY --from=build ./app/prisma ./prisma
